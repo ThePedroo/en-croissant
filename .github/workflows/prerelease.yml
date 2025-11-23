@@ -76,13 +76,12 @@ jobs:
           prerelease: true
           args: ${{ matrix.args }}
 
-      # **New step**: Upload the compiled binaries from src-tauri/target/release
-      - name: Upload release assets
-        uses: svenstaro/upload-release-action@v2  # or v1, depending on your preference
+      # Upload only on Windows
+      - name: Upload Windows exe
+        if: matrix.platform == 'windows-latest'
+        uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file_glob: true
-          file: |
-            src-tauri/target/release/**   # glob all files in the release dir
-          asset_name: ${{ github.ref_name }}-beta-${{ matrix.platform }}  # or a better naming scheme
-
+          file: src-tauri/target/release/en-croissant.exe
+          asset_name: en-croissant-windows.exe
+          overwrite: true
